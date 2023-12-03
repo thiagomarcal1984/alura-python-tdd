@@ -200,3 +200,65 @@ O TDD tem um ciclo de 3 fases:
 1. Criar/adaptar o teste (que vão falhar num primeiro momento);
 2. Criar/adaptar a funcionalidade (para passar no teste);
 3. Refatorar a funcionalidade (para fazer o código se conformar a boas práticas, padrões de projeto etc.).
+
+# Implementando uma funcionalidade
+Primeira etapa: criar o teste:
+```python
+    def test_quando_decrescimo_salario_recebe_100000_deve_retornar_90000(self):
+        # Given
+        entrada_salario  = 100000
+        entrada_nome = 'Paulo Bragança'
+        esperado =  90000
+
+        funcionario_teste = Funcionario(entrada_nome, '11/11/2000', entrada_salario)
+
+        # When
+        funcionario_teste.decrescimo_salario()
+        resultado = funcionario_teste.salario
+
+        # Then
+        assert resultado == esperado
+```
+> Depois de rodar o `pytest -v`, o código vai apresentar o seguinte erro, já que o método não existe na classe `Funcionario`: 
+> ```
+> >       funcionario_teste.decrescimo_salario()
+> E       AttributeError: 'Funcionario' object has no attribute 'decrescimo_salario'
+> 
+> test\test_bytebank.py:36: AttributeError
+> ========================= short test summary info ==========================
+> FAILED test/test_bytebank.py::TestClass::test_quando_decrescimo_salario_recebe_100000_deve_retornar_90000
+> ======================= 1 failed, 2 passed in 0.21s ========================
+> ```
+
+Segunda etapa: criar uma funcionalidade para que o teste passe.
+```python
+class Funcionario:
+    # Resto do código
+    def decrescimo_salario(self):
+        sobrenomes = ['Bragança', 'Windsor', 'Bourbon', 'Yamato', 'Ptolomeu']
+        if self._salario >= 100000 and (self.sobrenome() in sobrenomes):
+            decrescimo = self._salario * 0.1
+            self._salario -= decrescimo
+    # Resto do código
+```
+Após a criação da funcionalidade, verifique se os testes passaram
+```
+(venv) PS D:\alura\python-tdd> pytest -v
+=========================== test session starts ============================
+platform win32 -- Python 3.11.0, pytest-7.1.2, pluggy-1.3.0 -- D:\alura\python-tdd\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\alura\python-tdd
+collected 3 items
+
+test/test_bytebank.py::TestClass::test_quando_idade_recebe_13_03_2000_deve_retornar_22 PASSED [ 33%]
+test/test_bytebank.py::TestClass::test_quando_sobrenome_recebe_Lucas_Carvalho_deve_retornar_Carvalho PASSED [ 66%]
+test/test_bytebank.py::TestClass::test_quando_decrescimo_salario_recebe_100000_deve_retornar_90000 PASSED [100%]
+
+============================ 3 passed in 0.04s ============================= 
+(venv) PS D:\alura\python-tdd>
+```
+Terceira etapa: refatorar o código.
+
+No exemplo, o método `decrescimo_salario` faz duas coisas: checa se a pessoa tem um sobrnome e faz o decréscimo do salário. Isso fere o princípio da responsabilidade única do código.
+
+Essa refatoração vai ser feita na próxima aula.

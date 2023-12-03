@@ -194,3 +194,9 @@ class TestClass:
         assert resultado == esperado
 ```
 Existe uma forma de desenvolver inversa: primeiro desenvolvemos o teste e depois desenvolvemos a funcionalidade. Essa é a premissao do TDD (Test Driven Development).
+
+# TDD - Test Driven Development
+O TDD tem um ciclo de 3 fases:
+1. Criar/adaptar o teste (que vão falhar num primeiro momento);
+2. Criar/adaptar a funcionalidade (para passar no teste);
+3. Refatorar a funcionalidade (para fazer o código se conformar a boas práticas, padrões de projeto etc.).

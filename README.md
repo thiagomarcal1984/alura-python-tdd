@@ -154,3 +154,11 @@ class TestClass:
         assert resultado == esperado #Then resultado == esperado
 ```
 > Se o arquivo estivesse nomeado como `tests_...` ao invés de `test_...`, o Pytest não vai reconhecer o arquivo e portanto o teste não será realizado.
+
+# Para saber mais: Arrange-Act-Assert
+
+Existe uma outra metodologia muito utilizada para a construção do raciocínio de funcionamento de testes chamada **Arrange-Act-Assert** ou simplesmente **AAA**. Essa metodologia também consiste em 3 etapas para a construção de um teste, análogas às etapas do **Given-When-Then**.
+
+- **Arrange:** A tradução não literal seria algo como organizar. A organização, nesse caso, seria focada nos passos preliminares necessários para montar o contexto inicial do teste;
+- **Act:** A tradução não literal seria algo como agir. Nesse caso seria a ação que parte dos passos organizados na primeira etapa e leva ao que vamos averiguar no final;
+- **Assert:** A tradução não literal seria algo como averiguar. Nesse caso, averiguarmos que o desfecho trazido pela ação é realmente aquele que esperamos.

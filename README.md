@@ -65,3 +65,39 @@ class Funcionario:
         return ano_atual - int(ano_nascimento)
     # Resto do código
 ```
+# O que são testes?
+Teste manual:
+1. Mais lento;
+2. Sujeito a falhas (fator humano);
+3. Inconveniente.
+
+Teste automatizado:
+1. Ele é... automatizado;
+2. Feedback rápido;
+3. Segurança em alteração do código.
+4. Apoia o processo de refactoring.
+
+# Tipos de teste
+1. Teste unitário: testa apenas uma pequena parte da aplicação.
+2. Teste de integração: testa a comunicação entre as partes menores.
+3. Teste de ponta a ponta (E2E): simula o usuário da aplicação, ele é mais abrangente.
+
+O foco do curso será testes unitários.
+
+Mas veja o exemplo da função `teste_idade`:
+```python
+from bytebank import Funcionario
+
+def teste_idade():
+    funcionario_teste = Funcionario('Teste', '13/03/2000', 1111)
+    print(f'Teste = {funcionario_teste.idade()}')
+
+    funcionario_teste1 = Funcionario('Teste', '13/03/1999', 1111)
+    print(f'Teste = {funcionario_teste1.idade()}')
+
+    funcionario_teste2 = Funcionario('Teste', '01/12/1999', 1111)
+    print(f'Teste = {funcionario_teste2.idade()}')
+
+teste_idade()
+```
+Repare que o número de cenários aumentou. Se houver a criação de muitos cenários diferentes, pode ser difícil perceber o que funcionou e o que falhou.

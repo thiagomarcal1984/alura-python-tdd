@@ -162,3 +162,35 @@ Existe uma outra metodologia muito utilizada para a construção do raciocínio 
 - **Arrange:** A tradução não literal seria algo como organizar. A organização, nesse caso, seria focada nos passos preliminares necessários para montar o contexto inicial do teste;
 - **Act:** A tradução não literal seria algo como agir. Nesse caso seria a ação que parte dos passos organizados na primeira etapa e leva ao que vamos averiguar no final;
 - **Assert:** A tradução não literal seria algo como averiguar. Nesse caso, averiguarmos que o desfecho trazido pela ação é realmente aquele que esperamos.
+
+# Outro cenário para testar
+Uma nova funcionalidade (retornar o sobrenome) será criada. Após a sua criação, foi criado um novo cenário de teste.
+
+Nova definição da classe `Funcionario`:
+```python
+class Funcionario:
+    # Resto do código
+    def sobrenome(self):
+        # Remover caracteres em branco do início e do fim da string.
+        nome_completo = self.nome.strip() 
+        nome_quebrado = nome_completo.split(' ')
+        return nome_quebrado[-1]
+    # Resto do código
+```
+
+```python
+class TestClass:
+    # Resto do código
+    def test_quando_sobrenome_recebe_Lucas_Carvalho_deve_retornar_Carvalho(self):
+        # Given
+        entrada = ' Lucas Carvalho '
+        esperado = 'Carvalho'
+        lucas = Funcionario(entrada, '11/11/2000', 1111)
+
+        # When
+        resultado = lucas.sobrenome()
+
+        # Then
+        assert resultado == esperado
+```
+Existe uma forma de desenvolver inversa: primeiro desenvolvemos o teste e depois desenvolvemos a funcionalidade. Essa é a premissao do TDD (Test Driven Development).

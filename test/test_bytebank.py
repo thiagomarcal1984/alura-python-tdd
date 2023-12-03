@@ -11,3 +11,15 @@ class TestClass:
 
         # Then-Desfecho
         assert resultado == esperado #Then resultado == esperado
+
+    def test_quando_sobrenome_recebe_Lucas_Carvalho_deve_retornar_Carvalho(self):
+        # Given
+        entrada = ' Lucas Carvalho '
+        esperado = 'Carvalho'
+        lucas = Funcionario(entrada, '11/11/2000', 1111)
+
+        # When
+        resultado = lucas.sobrenome()
+
+        # Then
+        assert resultado == esperado

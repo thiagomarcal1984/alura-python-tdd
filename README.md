@@ -101,3 +101,23 @@ def teste_idade():
 teste_idade()
 ```
 Repare que o número de cenários aumentou. Se houver a criação de muitos cenários diferentes, pode ser difícil perceber o que funcionou e o que falhou.
+
+# Instalação do Pytest
+Vantagens do Pytest:
+1. Múltiplos plugins;
+2. Altamente escalável (dá conta do crescimento da base de código);
+3. Utilização simples.
+
+Para instalar o Pytest, use o comando abaixo (após entrar no ambiente virtual):
+
+```shell
+.\venv\Scripts\activate
+pip install pytest==7.1.2
+```
+
+Depois de instalar os pacotes, pode ser interessante gerar o arquivo `requirements.txt` para conter as dependências usadas no seu ambiente e poder replicar esse ambiente em outor momento:
+```shell
+pip freeze > requirements.txt
+```
+
+Para usar o Pytest, insira as classes de teste no diretório `tests`. Esse diretório precisa ser tratado como um módulo do Python, portanto precisamos inserir o arquivo `__init__.py` dentro do diretório `tests`.

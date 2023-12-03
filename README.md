@@ -262,3 +262,20 @@ Terceira etapa: refatorar o código.
 No exemplo, o método `decrescimo_salario` faz duas coisas: checa se a pessoa tem um sobrnome e faz o decréscimo do salário. Isso fere o princípio da responsabilidade única do código.
 
 Essa refatoração vai ser feita na próxima aula.
+
+# Refatorando o código
+A refatoração vai consistir em dividr o método `decrescimo_salario` em duas partes separadas:
+```python
+class Funcionario:
+    # Resto do código
+    def decrescimo_salario(self):
+        if self._eh_socio():
+            decrescimo = self._salario * 0.1
+            self._salario -= decrescimo
+
+    def _eh_socio(self):
+        sobrenomes = ['Bragança', 'Windsor', 'Bourbon', 'Yamato', 'Ptolomeu']
+        return self._salario >= 100000 and (self.sobrenome() in sobrenomes)
+    # Resto do código
+```
+Depois de executar o `pytest -v`, os testes continuam passando e o código das funcionalidades está melhor estruturado.

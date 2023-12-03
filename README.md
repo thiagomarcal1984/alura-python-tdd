@@ -120,4 +120,37 @@ Depois de instalar os pacotes, pode ser interessante gerar o arquivo `requiremen
 pip freeze > requirements.txt
 ```
 
-Para usar o Pytest, insira as classes de teste no diretório `tests`. Esse diretório precisa ser tratado como um módulo do Python, portanto precisamos inserir o arquivo `__init__.py` dentro do diretório `tests`.
+Para usar o Pytest, insira as classes de teste no diretório `tests` (nome no plural). Esse diretório precisa ser tratado como um módulo do Python, portanto precisamos inserir o arquivo `__init__.py` dentro do diretório `tests`.
+
+# Teste automatizado com Pytest
+Qualquer método testável pelo Pytest deve ser prefixado com `test_`, no singular, em caixa baixa e com o underline.
+
+Uma boa prática para testes é colocar nomes verbosos nos métodos/funções dos testes.
+
+Metodologia Given-When-Then:
+1. Dado (contexto), por exemplo "dinheiro guardado";
+2. Quando (ação), por exemplo "comprar blusa";
+3. Então (desfecho), por exemplo "blusa comprada".
+
+A invocação dos testes com Pytest pode ser verbosa (basta inserir o parâmetro `-v` ou `--verbose`):
+```
+pytest --verbose
+```
+
+Definição da classe de teste `TestClase` no arquivo `tests/test_bytebank.py`:
+```python
+from bytebank import Funcionario
+class TestClass:
+    def test_quando_idade_recebe_13_03_2000_deve_retornar_22(self):
+        # Given-Contexto
+        entrada = '13/03/2000' # Given-Entrada
+        esperado = 23
+        funcionario_teste = Funcionario('Teste', entrada, 1111)
+
+        # When-Quando
+        resultado = funcionario_teste.idade() # When-idade()
+
+        # Then-Desfecho
+        assert resultado == esperado #Then resultado == esperado
+```
+> Se o arquivo estivesse nomeado como `tests_...` ao invés de `test_...`, o Pytest não vai reconhecer o arquivo e portanto o teste não será realizado.

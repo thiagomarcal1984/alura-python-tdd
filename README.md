@@ -310,3 +310,28 @@ class Funcionario:
         return valor
 ```
 O teste para capturar a exceção será escrito na próxima aula.
+
+# Lidando com Exceptions no Pytest
+Qualquer teste que precise confirmar o lançamento de uma exceção deve ser envolvido por `with pytest.raises(NomeDaException)`.
+
+Veja a implementação do teste a seguir:
+```python
+from bytebank import Funcionario
+import pytest
+
+class TestClass:
+    # Resto do código
+    def test_quando_calcular_bonus_recebe_1000000_deve_retornar_exception(self):
+        with pytest.raises(Exception):
+            # Given
+            entrada  = 1000000
+
+            funcionario_teste = Funcionario('Teste', '11/11/2000', entrada)
+
+            # When
+            resultado = funcionario_teste.calcular_bonus()
+
+            # Then
+            # Se a exceção não for lançada após a execução do teste, 
+            # ele não passa (Failed: DID NOT RAISE <class 'Exception'>).
+```

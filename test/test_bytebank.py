@@ -1,4 +1,6 @@
 from bytebank import Funcionario
+import pytest
+
 class TestClass:
     def test_quando_idade_recebe_13_03_2000_deve_retornar_22(self):
         # Given-Contexto
@@ -51,3 +53,17 @@ class TestClass:
 
         # Then
         assert resultado == esperado
+
+    def test_quando_calcular_bonus_recebe_1000000_deve_retornar_exception(self):
+        with pytest.raises(Exception):
+            # Given
+            entrada  = 1000000
+
+            funcionario_teste = Funcionario('Teste', '11/11/2000', entrada)
+
+            # When
+            resultado = funcionario_teste.calcular_bonus()
+
+            # Then
+            # Se a exceção não for lançada após a execução do teste, 
+            # ele não passa (Failed: DID NOT RAISE <class 'Exception'>).

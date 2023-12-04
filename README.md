@@ -488,3 +488,85 @@ Exibição dos markers registrados após a inclusão do arquivo `pytest.ini` e a
 
 # Resto da saída
 ```
+# Para saber mais: Markers
+Parte da razão pela qual o Pytest é conhecido como framework de testes, não uma simples biblioteca, está no fato do Pytest possuir uma vasta gama de ferramentas direcionadas a melhorar a eficiência e organização dos testes desenvolvidos.
+
+Os markers ou marcadores são uma dessas ferramentas incríveis do Pytest e oferecem não somente uma forma de organizar melhor os testes com tags personalizadas, mas colaboram para definir como determinados testes irão funcionar ou ser executados.
+
+## skip
+```python
+@pytest.mark.skip(reason="não quero executar isso agora")
+def test_aleatorio():
+    # Resto do código.
+```
+Através do uso do marker `skip` podemos pular um teste, caso a execução dele não seja necessária naquele instante.
+
+## skipif
+```python
+import sys
+
+@pytest.mark.skipif(sys.version_info < (3, 10), reason="Requer Python na versão 3.10 ou superior")
+def test_funcao():
+    # Resto do código.
+```
+Acima, o teste não é executado caso sys.version_info < (3, 10) seja verdadeiro, ou seja, caso a versão do Python esteja abaixo da versão 3.10.
+
+Através do uso do marker `skipif` podemos pular um teste caso ele se encaixe em determinada situação definida por uma condicional.
+
+## xfail
+```python
+@pytest.mark.xfail
+def test_funcao():
+    # Resto do código.
+```
+Através do uso do marker xfail especificamos que o teste deve retornar uma falha, em vez de passar.
+
+Essas e muitas outras possibilidades de uso de markers para modificar a mecânica de uso dos testes podem ser vistas na documentação oficial do Pytest.
+
+How to mark test functions with attributes: https://docs.pytest.org/en/7.1.x/how-to/mark.html#mark
+
+## Testando o marker `xfail`
+Mudei o código do método `test_quando_calcular_bonus_recebe_1000000_deve_retornar_exception`:
+```python
+    @mark.calcular_bonus
+    @pytest.mark.xfail
+    def test_quando_calcular_bonus_recebe_1000000_deve_retornar_exception(self):
+        # with pytest.raises(Exception):
+            # Resto do código
+```
+Após executar o `pytest`, o resultado mostra quais testes passaram e quais falharam porque deveriam falhar (o número de `xfailed`):
+```
+(venv) PS D:\alura\python-tdd> pytest
+====================================================================== test session starts ======================================================================
+platform win32 -- Python 3.11.0, pytest-7.1.2, pluggy-1.3.0
+rootdir: D:\alura\python-tdd, configfile: pytest.ini
+collected 5 items
+
+test\test_bytebank.py ....x                                                                                                                                [100%]
+
+================================================================= 4 passed, 1 xfailed in 0.22s ================================================================== 
+(venv) PS D:\alura\python-tdd> 
+```
+## E se o teste marcado com `xfail` passar?
+Suponha um código que deveria lançar uma exceção, mas não lança:
+```python
+    @mark.calcular_bonus
+    @pytest.mark.xfail
+    def test_quando_calcular_bonus_recebe_1000000_deve_retornar_exception(self):
+        with pytest.raises(Exception):
+            # Resto do código
+```
+
+Nesse caso, o relatório do Pytest exibe o parâmetro `xpassed` (que mostra testes que passaram, mas não deveriam):
+```
+(venv) PS D:\alura\python-tdd> pytest
+====================================================================== test session starts ======================================================================
+platform win32 -- Python 3.11.0, pytest-7.1.2, pluggy-1.3.0
+rootdir: D:\alura\python-tdd, configfile: pytest.ini
+collected 5 items
+
+test\test_bytebank.py ....X                                                                                                                                [100%]
+
+================================================================= 4 passed, 1 xpassed in 0.05s ================================================================== 
+(venv) PS D:\alura\python-tdd> 
+```

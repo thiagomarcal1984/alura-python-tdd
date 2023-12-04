@@ -57,6 +57,7 @@ class TestClass:
         assert resultado == esperado
 
     @mark.calcular_bonus
+    @pytest.mark.xfail
     def test_quando_calcular_bonus_recebe_1000000_deve_retornar_exception(self):
         with pytest.raises(Exception):
             # Given

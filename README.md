@@ -279,3 +279,34 @@ class Funcionario:
     # Resto do código
 ```
 Depois de executar o `pytest -v`, os testes continuam passando e o código das funcionalidades está melhor estruturado.
+
+# Um método com Exception
+Criação do teste para o "caso feliz" do cálculo do bônus do salário:
+```python
+from bytebank import Funcionario
+class TestClass:
+    # Resto do código.
+    def test_quando_calcular_bonus_recebe_1000_deve_retorna_100(self):
+        # Given
+        entrada  = 1000
+        esperado =  100
+
+        funcionario_teste = Funcionario('Teste', '11/11/2000', entrada)
+
+        # When
+        resultado = funcionario_teste.calcular_bonus()
+
+        # Then
+        assert resultado == esperado
+```
+O "caso infeliz" é quando o funcionário não faz jus ao bônus. O método foi reescrito para lançar uma exceção:
+```python
+class Funcionario:
+    # Resto do código.
+    def calcular_bonus(self):
+        valor = self._salario * 0.1
+        if valor > 1000:
+            raise Exception('O salário é muito alto para receber um bônus.')
+        return valor
+```
+O teste para capturar a exceção será escrito na próxima aula.

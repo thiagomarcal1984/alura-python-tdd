@@ -38,3 +38,16 @@ class TestClass:
 
         # Then
         assert resultado == esperado
+
+    def test_quando_calcular_bonus_recebe_1000_deve_retorna_100(self):
+        # Given
+        entrada  = 1000
+        esperado =  100
+
+        funcionario_teste = Funcionario('Teste', '11/11/2000', entrada)
+
+        # When
+        resultado = funcionario_teste.calcular_bonus()
+
+        # Then
+        assert resultado == esperado

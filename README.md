@@ -335,3 +335,156 @@ class TestClass:
             # Se a exceção não for lançada após a execução do teste, 
             # ele não passa (Failed: DID NOT RAISE <class 'Exception'>).
 ```
+# Organizando testes com Markers
+## Filtrando os testes pelo nome do método (parâmetro `-k` do pytest)
+O parâmetro `-k <string_procurada>` no Pytest permite filtrar os nomes dos testes que serão executados. Veja o exemplo abaixo, procurando pela palavra `idade` nos métodos de teste:
+```
+(venv) PS D:\alura\python-tdd> pytest --verbose -k idade
+====================================================================== test session starts ======================================================================
+platform win32 -- Python 3.11.0, pytest-7.1.2, pluggy-1.3.0 -- D:\alura\python-tdd\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\alura\python-tdd
+collected 5 items / 4 deselected / 1 selected
+
+test/test_bytebank.py::TestClass::test_quando_idade_recebe_13_03_2000_deve_retornar_22 PASSED                                                              [100%] 
+
+================================================================ 1 passed, 4 deselected in 0.04s ================================================================ 
+(venv) PS D:\alura\python-tdd> 
+```
+
+Mesma coisa, procurando pela palavra `calcular`:
+```
+(venv) PS D:\alura\python-tdd> pytest -v -k calcular
+====================================================================== test session starts ======================================================================
+platform win32 -- Python 3.11.0, pytest-7.1.2, pluggy-1.3.0 -- D:\alura\python-tdd\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\alura\python-tdd
+collected 5 items / 3 deselected / 2 selected
+
+test/test_bytebank.py::TestClass::test_quando_calcular_bonus_recebe_1000_deve_retorna_100 PASSED                                                           [ 50%] 
+test/test_bytebank.py::TestClass::test_quando_calcular_bonus_recebe_1000000_deve_retornar_exception PASSED                                                 [100%]
+
+================================================================ 2 passed, 3 deselected in 0.04s ================================================================ 
+(venv) PS D:\alura\python-tdd> 
+```
+> Repare que há um número de testes não executados (deselected) nos resultados do teste.
+
+## Controlando quais testes serão executados por meio dos markers
+É possível "rotular" alguns testes com os chamados `markers`. O Pytest tem a anotação `pytest.mark`, que pode ser anteposta aos métodos de teste.
+
+Depois que os métodos de teste forem anotados com um marker (por exemplo, `@pytest.mark.meu_marker`), você pode executar o comando `pytest -m nome_exato_do_marker` para executar apenas os testes que contenham esse marker personalizado.
+
+Alguns markers tem funções específicas. Por exemplo, o marker `pytest.mark.skip` serve para pular o teste anotado.
+Para ver quais os markers estão registrados, use o comando `pytest --markers`.
+
+Vamos supor que queremos pular o teste `test_quando_idade_recebe_13_03_2000_deve_retornar_22`. Apenas anotamos ele com o marker `pytest.mark.skip`:
+```python
+from bytebank import Funcionario
+import pytest
+from pytest import mark
+
+class TestClass:
+    @mark.skip
+    def test_quando_idade_recebe_13_03_2000_deve_retornar_22(self):
+        # Implementação do teste.
+    # Resto do código.
+```
+
+Repare que, ao invocarmos `pytest -v`, o teste `test_quando_idade_recebe_13_03_2000_deve_retornar_22` não será executado (repare na palavra `SKIPPED`):
+```
+(venv) PS D:\alura\python-tdd> pytest -v
+====================================================================== test session starts ======================================================================
+platform win32 -- Python 3.11.0, pytest-7.1.2, pluggy-1.3.0 -- D:\alura\python-tdd\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\alura\python-tdd, configfile: pytest.ini
+collected 5 items
+
+test/test_bytebank.py::TestClass::test_quando_idade_recebe_13_03_2000_deve_retornar_22 SKIPPED (unconditional skip)                                        [ 20%] 
+test/test_bytebank.py::TestClass::test_quando_sobrenome_recebe_Lucas_Carvalho_deve_retornar_Carvalho PASSED                                                [ 40%]
+test/test_bytebank.py::TestClass::test_quando_decrescimo_salario_recebe_100000_deve_retornar_90000 PASSED                                                  [ 60%]
+test/test_bytebank.py::TestClass::test_quando_calcular_bonus_recebe_1000_deve_retorna_100 PASSED                                                           [ 80%] 
+test/test_bytebank.py::TestClass::test_quando_calcular_bonus_recebe_1000000_deve_retornar_exception PASSED                                                 [100%]
+
+================================================================= 4 passed, 1 skipped in 0.09s ================================================================== 
+(venv) PS D:\alura\python-tdd> 
+```
+
+# Usando markers personalizados.
+Nova definição da classe `TestClass`, com os markers do Pytest:
+```python
+from bytebank import Funcionario
+import pytest
+from pytest import mark
+
+class TestClass:
+    # Resto do código
+    @mark.calcular_bonus
+    def test_quando_calcular_bonus_recebe_1000_deve_retorna_100(self):
+        # Implementação do teste
+
+    @mark.calcular_bonus
+    def test_quando_calcular_bonus_recebe_1000000_deve_retornar_exception(self):
+        # Implementação do teste
+    # Resto do código
+```
+
+Ao executarmos o comando `pytest -v -m calcular_bonus`, recebemos alguns warnings porque o marker `calcular_bonus` não está registrado no Pytest:
+> Note que precisamos usar o nome exato do marker para que ele funcione. Se quisermos usar o marker `calcular_bonus`, não basta escrevermos apenas `calcular`.
+```
+(venv) PS D:\alura\python-tdd> pytest -v -m calcular_bonus
+====================================================================== test session starts ======================================================================
+platform win32 -- Python 3.11.0, pytest-7.1.2, pluggy-1.3.0 -- D:\alura\python-tdd\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\alura\python-tdd, configfile: pytest.ini
+collected 5 items / 3 deselected / 2 selected
+
+test/test_bytebank.py::TestClass::test_quando_calcular_bonus_recebe_1000_deve_retorna_100 PASSED                                                           [ 50%]
+test/test_bytebank.py::TestClass::test_quando_calcular_bonus_recebe_1000000_deve_retornar_exception PASSED                                                 [100%] 
+
+======================================================================= warnings summary ======================================================================== 
+test\test_bytebank.py:45
+  D:\alura\python-tdd\test\test_bytebank.py:45: PytestUnknownMarkWarning: Unknown pytest.mark.calcular_bonus - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @mark.calcular_bonus
+
+test\test_bytebank.py:59
+  D:\alura\python-tdd\test\test_bytebank.py:59: PytestUnknownMarkWarning: Unknown pytest.mark.calcular_bonus - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @mark.calcular_bonus
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+========================================================== 2 passed, 3 deselected, 2 warnings in 0.06s ========================================================== 
+(venv) PS D:\alura\python-tdd> 
+```
+
+Para evitar esses warnings, temos que configurar o arquivo `pytest.ini` na raiz do projeto. Ele terá a seguinte configuração:
+```ini
+[pytest]
+markers = 
+    ; nome_do_marker: Descrição do marker.
+    calcular_bonus: Teste para o método calcular_bonus.
+```
+
+Repetindo o comando após a inclusão do `pytest.ini`, os warnings não vão mais aparecer:
+```
+(venv) PS D:\alura\python-tdd> pytest -v -m calcular_bonus
+====================================================================== test session starts ======================================================================
+platform win32 -- Python 3.11.0, pytest-7.1.2, pluggy-1.3.0 -- D:\alura\python-tdd\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\alura\python-tdd, configfile: pytest.ini
+collected 5 items / 3 deselected / 2 selected
+
+test/test_bytebank.py::TestClass::test_quando_calcular_bonus_recebe_1000_deve_retorna_100 PASSED                                                           [ 50%] 
+test/test_bytebank.py::TestClass::test_quando_calcular_bonus_recebe_1000000_deve_retornar_exception PASSED                                                 [100%] 
+
+================================================================ 2 passed, 3 deselected in 0.04s ================================================================ 
+(venv) PS D:\alura\python-tdd> 
+```
+
+Exibição dos markers registrados após a inclusão do arquivo `pytest.ini` e a execução do comando `pytest --markers`:
+```
+(venv) PS D:\alura\python-tdd> pytest --markers
+@pytest.mark.calcular_bonus: Teste para o método calcular_bonus.
+
+@pytest.mark.filterwarnings(warning): add a warning filter to the given test. see https://docs.pytest.org/en/stable/how-to/capture-warnings.html#pytest-mark-filterwarnings
+
+# Resto da saída
+```

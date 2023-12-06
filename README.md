@@ -570,3 +570,61 @@ test\test_bytebank.py ....X                                                     
 ================================================================= 4 passed, 1 xpassed in 0.05s ================================================================== 
 (venv) PS D:\alura\python-tdd> 
 ```
+
+# Configurando ferramenta de cobertura
+A extensão `pytest-cov` permite analisar a cobertura dos testes escritos com Pytest. Para invocar essa extensão, use o parâmetro `--cov` (coverage, cobertura) do comando `pytest`.
+
+```
+(venv) PS D:\alura\python-tdd> pytest --cov
+=========================== test session starts ============================
+platform win32 -- Python 3.11.0, pytest-7.1.2, pluggy-1.3.0
+rootdir: D:\alura\python-tdd, configfile: pytest.ini
+plugins: cov-4.1.0
+collected 5 items
+
+test\test_bytebank.py ....X                                           [100%]
+
+---------- coverage: platform win32, python 3.11.0-final-0 -----------       
+Name                    Stmts   Miss  Cover
+-------------------------------------------
+bytebank.py                35      1    97%
+test\__init__.py            0      0   100%
+test\test_bytebank.py      38      0   100%
+-------------------------------------------
+TOTAL                      73      1    99%
+
+
+======================= 4 passed, 1 xpassed in 0.11s ======================= 
+(venv) PS D:\alura\python-tdd> 
+```
+
+O relatório tem 3 colunas: 
+1. Statements (Stmts) é o número de linhas de código declaradas.
+2. Miss é o número de linhas de código não testadas.
+3. Cover é a razão entre as declarações cobertas e o número de todas as declarações (resultando o percentual de cobertura).
+
+Repare que o relatório analisa a cobertura de outros arquivos que não necessariamente precisam ser testados (os dois arquivos de dentro do diretório test).
+
+Para evitar essa poluição no relatório, forneça para o parâmetro `--cov` o valor correspondente ao módulo que será testado, e em seguida o valor que corresponde ao módulo onde estão testes que serão executados (no caso, o diretório `test`):
+
+```
+(venv) PS D:\alura\python-tdd> pytest --cov=bytebank test
+=========================== test session starts ============================
+platform win32 -- Python 3.11.0, pytest-7.1.2, pluggy-1.3.0
+rootdir: D:\alura\python-tdd, configfile: pytest.ini
+plugins: cov-4.1.0
+collected 5 items
+
+test\test_bytebank.py ....X                                           [100%]
+
+---------- coverage: platform win32, python 3.11.0-final-0 -----------       
+Name          Stmts   Miss  Cover
+---------------------------------
+bytebank.py      35      1    97%
+---------------------------------
+TOTAL            35      1    97%
+
+
+======================= 4 passed, 1 xpassed in 0.06s ======================= 
+(venv) PS D:\alura\python-tdd> pytest --cov=bytebank test
+```

@@ -605,10 +605,10 @@ O relatório tem 3 colunas:
 
 Repare que o relatório analisa a cobertura de outros arquivos que não necessariamente precisam ser testados (os dois arquivos de dentro do diretório test).
 
-Para evitar essa poluição no relatório, forneça para o parâmetro `--cov` o valor correspondente ao módulo que será testado, e em seguida o valor que corresponde ao módulo onde estão testes que serão executados (no caso, o diretório `test`):
+Para evitar essa poluição no relatório, forneça para o parâmetro `--cov` o valor correspondente ao módulo que será testado, e em seguida o valor que corresponde ao diretório onde estão os testes que serão executados (no caso, o diretório `test`):
 
 ```
-(venv) PS D:\alura\python-tdd> pytest --cov=bytebank test
+(venv) PS D:\alura\python-tdd> pytest --cov=bytebank test/
 =========================== test session starts ============================
 platform win32 -- Python 3.11.0, pytest-7.1.2, pluggy-1.3.0
 rootdir: D:\alura\python-tdd, configfile: pytest.ini
@@ -627,4 +627,75 @@ TOTAL            35      1    97%
 
 ======================= 4 passed, 1 xpassed in 0.06s ======================= 
 (venv) PS D:\alura\python-tdd> pytest --cov=bytebank test
+```
+
+# Garantindo cobertura total
+Podemos passar o parâmetro `--cov-report term-missing` para o Pytest, de forma a exibir as linhas de código que não tem teste associado:
+
+```
+(venv) PS D:\alura\python-tdd> pytest --cov=bytebank test/ --cov-report term-missing
+=========================== test session starts ============================
+platform win32 -- Python 3.11.0, pytest-7.1.2, pluggy-1.3.0
+rootdir: D:\alura\python-tdd, configfile: pytest.ini
+plugins: cov-4.1.0
+collected 5 items
+
+test\test_bytebank.py ....X                                           [100%]
+
+---------- coverage: platform win32, python 3.11.0-final-0 -----------       
+Name          Stmts   Miss  Cover   Missing
+-------------------------------------------
+bytebank.py      35      1    97%   46
+-------------------------------------------
+TOTAL            35      1    97%
+
+
+======================= 4 passed, 1 xpassed in 0.09s ======================= 
+(venv) PS D:\alura\python-tdd>
+```
+> Repare na coluna `Missing`, que contém o número 46. Esse número é o da linha de código sem teste.
+
+
+Mudança no teste para aumentar a cobertura do código:
+```python
+from bytebank import Funcionario
+import pytest
+from pytest import mark
+
+class TestClass:
+    # Resto do código
+    def test_retorno_str(self):
+        # Given
+        nome, data_nascimento, salario =  'Teste', '11/11/2000', 2000
+        esperado = "Funcionario(Teste, 11/11/2000, 2000)"
+
+        # When
+        funcionario_teste = Funcionario(nome, data_nascimento, salario)
+        resultado = funcionario_teste.__str__()
+        
+        # Then
+        assert resultado == esperado
+```
+
+Usando novamente o `pytest-cov` para ver o percentual de cobertura:
+```
+(venv) PS D:\alura\python-tdd> pytest --cov=bytebank --cov-report term-missing
+=========================== test session starts ============================
+platform win32 -- Python 3.11.0, pytest-7.1.2, pluggy-1.3.0
+rootdir: D:\alura\python-tdd, configfile: pytest.ini
+plugins: cov-4.1.0
+collected 6 items
+
+test\test_bytebank.py ....X.                                          [100%]
+
+---------- coverage: platform win32, python 3.11.0-final-0 -----------       
+Name          Stmts   Miss  Cover   Missing
+-------------------------------------------
+bytebank.py      35      0   100%
+-------------------------------------------
+TOTAL            35      0   100%
+
+
+======================= 5 passed, 1 xpassed in 0.12s ======================= 
+(venv) PS D:\alura\python-tdd> 
 ```

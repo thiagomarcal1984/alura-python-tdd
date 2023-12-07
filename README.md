@@ -699,3 +699,45 @@ TOTAL            35      0   100%
 ======================= 5 passed, 1 xpassed in 0.12s ======================= 
 (venv) PS D:\alura\python-tdd> 
 ```
+# Excluindo código para a cobertura
+
+## Relatórios em HTML
+Para criar um relatório de testes e mformato HTML, insira no parâmetro `--cov-report` o valor `html` (`pytest --cov=bytebank --cov-report html`):
+```
+(venv) PS D:\alura\python-tdd> pytest --cov=bytebank --cov-report html
+=========================== test session starts ============================
+platform win32 -- Python 3.11.0, pytest-7.1.2, pluggy-1.3.0
+rootdir: D:\alura\python-tdd, configfile: pytest.ini
+plugins: cov-4.1.0
+collected 5 items
+
+test\test_bytebank.py ....X                                           [100%]
+
+---------- coverage: platform win32, python 3.11.0-final-0 -----------       
+Coverage HTML written to dir htmlcov
+
+
+======================= 4 passed, 1 xpassed in 0.26s ======================= 
+(venv) PS D:\alura\python-tdd> pytest --cov=bytebank --cov-report html
+```
+
+> Após a execução do comando, o diretório `htmlcov` será criado, com vários arquivos HTML vinculados a cada módulo Python testado. ***O diretório htmlcov foi renomeado para #htmlcov porque o .gitignore não consegue remover a exceção para o diretório com a cobertura dos teste***.
+>
+> Esses relatórios HTML permitem destacar:
+> 1.  o que está coberto por testes;
+> 2.  o que não está coberto por testes; e 
+> 3. os testes que foram ignorados.
+
+## Excluindo testes com o arquivo `.coveragerc`
+O arquivo `.coveragerc` (que fica na raiz do projeto) contém algumas configurações para a extensão `pytest-cov`, semelhantes às de um arquivo `.ini`:
+
+```ini
+[run]
+
+[report]
+exclude_lines = 
+    def __str__
+```
+Abaixo do parâmetro `[report]exclude_lines` colocamos os prefixos dos métodos que desejamos excluir da cobertura de testes.
+
+Para refazer o relatório com as exclusões, basta repetir o código `pytest --cov --cov-report html`.

@@ -71,15 +71,3 @@ class TestClass:
             # Then
             # Se a exceção não for lançada após a execução do teste, 
             # ele não passa (Failed: DID NOT RAISE <class 'Exception'>).
-
-    def test_retorno_str(self):
-        # Given
-        nome, data_nascimento, salario =  'Teste', '11/11/2000', 2000
-        esperado = "Funcionario(Teste, 11/11/2000, 2000)"
-
-        # When
-        funcionario_teste = Funcionario(nome, data_nascimento, salario)
-        resultado = funcionario_teste.__str__()
-        
-        # Then
-        assert resultado == esperado

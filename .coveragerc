@@ -1,5 +1,14 @@
 [run]
+# É necessário informar o `diretório` que 
+# será acessado, não o módulo Python.
+# Por isso, o arquivo `bytebank.py` foi movido 
+# para o diretório `codigo`, e as referências a 
+# esse arquivo foram atualizadas.
+source = ./codigo
 
 [report]
 exclude_lines = 
     def __str__
+
+[html]
+directory = coverage_relatorio_html
